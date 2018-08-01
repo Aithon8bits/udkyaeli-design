@@ -14,6 +14,14 @@ Single line coments start with `//` and span until the end of a line.
 
 Multiline comments are enclosed between `/*` and `*/`.
 
+### Lexical scoping
+
+Children scopes are created based on their position in the source code, not in the calling context.
+
+### Garbage collection
+
+Objects are destroyed when they are no longer accessible from the program.
+
 ### Literals
 
 #### Null
@@ -65,6 +73,35 @@ For example:
     // do more stuff
     return x / y
 ```
+
+Even if you use a single statement a new scope is created.
+
+### Statements and blocks
+
+#### No need for semicolons
+
+Semicolons at the end of each statment are not required. They can, however, be used to put two statements in the same physical line.
+
+#### Line continuation
+
+A logical line can span multiple physical lines. To do so add a `\` at the continuation edges. Take note that no space is automatically inserted.
+
+For example:
+```
+long_long_long_long_long_\
+\long_long_variable_name
+```
+
+Usually, you don't break lines somewhere where you couldn't spare a space, so it's a good practice to put space before an ending `\` and after a starting one.
+
+```
+not_so_long_variable_name = \
+\ 4
+```
+
+#### Blocks
+
+Blocks of statements are sequences of lines one identation level to the right of the previous line. They define a new child scope.
 
 ## To do
 
