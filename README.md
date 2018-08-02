@@ -173,6 +173,24 @@ For example:
 .main
 ```
 
+### Type system
+
+#### Global base type
+
+All the types, both built-ins as user defined, inherit from `Data`.
+
+#### Constant and mutable types
+
+Mutable types are written with a `?` at the end. Constants are not. Mutable types inherit from their constant counterpart.
+
+For example, let `MyType` be a (constant) type, it's mutable version is `MyType?`.
+
+#### Multiple inheritance
+
+Types are allowed to have multiple parents. For dispatch, their C3 linearization is used. If they are not linearizable by such algorithm, it's mandatory to specify an explicit linearization.
+
+All the inheritance is virtual.
+
 ## To do
 
 * Add a syntax for other bases besides 10.
