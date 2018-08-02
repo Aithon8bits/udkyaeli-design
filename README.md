@@ -57,25 +57,6 @@ For example:
 Integer::[0, 1, 1, 2, 3, 5, 8]
 ```
 
-#### Methods
-
-Anonymous methods are defined by an arrow (`->`), followed by the argument list (including the type of each argument), another arrow, the return type, yet another arrow and a statement or block.
-
-For example:
-
-```
--> Integer: x, Integer: y -> Float -> return x / y
-```
-
-```
--> Integer: x, Integer: y -> Float ->
-    // do something
-    // do more stuff
-    return x / y
-```
-
-Even if you use a single statement a new scope is created.
-
 ### Statements and blocks
 
 #### No need for semicolons
@@ -102,6 +83,95 @@ not_so_long_variable_name = \
 #### Blocks
 
 Blocks of statements are sequences of lines one identation level to the right of the previous line. They define a new child scope.
+
+### Open multi methods
+
+#### Anonymous methods
+
+Anonymous methods are defined by an arrow (`->`), followed by the argument list (`TYPE: PARAMETER_NAME`, separated by `,`), another arrow, the return type, yet another arrow and a statement or block.
+
+For example:
+
+```
+-> Integer: x, Integer: y -> Float -> return x / y
+```
+
+```
+-> Integer: x, Integer: y -> Float ->
+    // do something
+    // do more stuff
+    return x / y
+```
+
+Even if you use a single statement a new scope is created.
+
+#### Type checking
+
+The types of each argument are checked to be children of their corresponding parameter type on every call that is not dispatched by a generic function. The return type is checked in return statements as well.
+
+#### Additional conditions
+
+You can specify additional conditions besides the type for the arguments by adding a `: CONDITION`.
+
+For example, the following two methods calculate the absolute value:
+
+```
+-> Float: x: x < 0 -> Float -> return -x
+
+-> Float: x: x >= 0 -> Float -> return x
+```
+
+#### Specific argument
+
+Instead of specifying a type and name for a parameter, you can put only an expression. If you do so, calling that function requires that argument to be equal to the result of that expression.
+
+For example, to the following method calculates the factorial for 0. To define it for the rest of the numbers a generic function is needed.
+
+```
+-> 0 -> Integer -> return 1
+```
+
+#### Generic functions
+
+Generic functions are a collection of methods. They dispatch in runtime with virtuality in all their arguments, prioritizing from left to right.
+
+To add a method to a function you use the `define` function.
+
+Here is the full factorial example.
+
+```
+Function: factorial
+
+define factorial -> 0 -> Integer -> return 1
+
+define factorial -> Integer: x: x > 0 -> Integer -> return x * factorial (x - 1)
+```
+
+#### Call syntax
+
+Functions and methods can be called by separating the callable and the arguments by spaces.
+
+For example, to call `f` with arguments `x`, `y` and `z`:
+
+```
+f x y z
+```
+
+Alternatively, they can be called by `FIRST_ARGUMENT.CALLABLE REST_OF_ARGUMENTS`.
+
+For example:
+
+```
+x.f y z
+```
+
+Functions that take no arguments can be called by appending a `.` to the left.
+
+For example:
+
+```
+.main
+```
 
 ## To do
 
