@@ -140,7 +140,7 @@ To add a method to a function you use the `define` function.
 Here is the full factorial example.
 
 ```
-Function: factorial
+Function: factorial := Function.raw_new
 
 define factorial -> 0 -> Integer -> return 1
 
@@ -190,6 +190,70 @@ For example, let `MyType` be a (constant) type, it's mutable version is `MyType?
 Types are allowed to have multiple parents. For dispatch, their C3 linearization is used. If they are not linearizable by such algorithm, it's mandatory to specify an explicit linearization.
 
 All the inheritance is virtual.
+
+### User defined types
+
+#### Enums
+
+Enums are defined by a `$$` followed by a enum block.
+
+For example:
+
+```
+Emotion := $$
+    happy
+    sad
+    angry
+    scared
+```
+
+#### Records
+
+Records are defined by a `$` followed by a record block.
+
+For example:
+
+```
+Person := $
+    String: name
+    Integer?: age
+```
+
+The function `raw_new` creates instances of it's argument.
+
+```
+Person: john := Person.raw_new
+```
+
+Members are accessed through the operator `@`.
+
+```
+john@name = "John"
+john@age = 34
+```
+
+You often want to define a constructor for the record. You can use any function but it's usual to override `new`.
+
+```
+define new -> Person, String: name: name.lenght > 0, Integer: age: age >= 0 -> Person ->
+    Person: self := Person.raw_new
+    self@name = name
+    self@age = age
+    return self
+
+Person: ann := Person.new "Ann" 27
+```
+
+#### Getters
+
+To write a getter simply define a unary method and call it with the `.` operator.
+
+```
+define name -> Person: person -> String ->
+    return person@name
+
+console.write_line ann.name
+```
 
 ## To do
 
